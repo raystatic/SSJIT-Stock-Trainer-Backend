@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
+const mysql = require('mysql');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -23,11 +27,11 @@ app.use((req, res, next)=> {
 });
 
 app.use((req, res, next) => {
-    // const error = new Error("Not Found!")
-    // error.status = 404;
-    // next(error);
 
-    res.send("Welcome to paper trading testing server!")
+    res.json({
+        error:false,
+        message:"testing server"
+    })
 });
 
 app.use((error, req, res, next) => {
@@ -38,6 +42,21 @@ app.use((error, req, res, next) => {
         }
     });
 });
+
+const connection = mysql.createConnection({
+    host:process.env.DB_HOST,
+    user:process.env.DB_USERNAME,
+    password:process.env.DB_PASSWORD,
+    database:process.env.DB_NAME
+});
+
+connection.connect((err) => {
+    if(err){
+        console.log("db not connected");
+        throw err;
+    }
+    console.log("db connected!");
+})
 
 
 module.exports = app;
