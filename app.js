@@ -3,9 +3,10 @@ const app = express();
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
 const mysql = require('mysql');
-const dotenv = require('dotenv');
+const connection = require('./dbConfig');
 
-dotenv.config();
+
+const loginRouter = require('./api/routes/login');
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -26,8 +27,16 @@ app.use((req, res, next)=> {
     next();
 });
 
-app.use((req, res, next) => {
+if(connection === null){
+    console.error("db connection failed!");
+}
 
+app.use(express.json());
+
+app.use('/api/v1/login',loginRouter);
+
+app.use('/',(req, res, next) => {
+    
     res.json({
         error:false,
         message:"testing server"
@@ -42,21 +51,5 @@ app.use((error, req, res, next) => {
         }
     });
 });
-
-const connection = mysql.createConnection({
-    host:process.env.DB_HOST,
-    user:process.env.DB_USERNAME,
-    password:process.env.DB_PASSWORD,
-    database:process.env.DB_NAME
-});
-
-connection.connect((err) => {
-    if(err){
-        console.log("db not connected");
-        throw err;
-    }
-    console.log("db connected!");
-})
-
 
 module.exports = app;
