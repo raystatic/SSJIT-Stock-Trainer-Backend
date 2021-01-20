@@ -14,20 +14,24 @@ router.get('/search',(req, res, next) => {
 
   const keyword = req.query.keyword;
 
-  NSEAPI.searchStocks(keyword)
-    .then((response) => {
-      res.json({
-        error:false,
-        data:response.data
-      });
-    })
-    .catch((err) => {
-     // console.error(err.message)
-      res.json({
-        error:true,
-        message:err.message
-      });
-    });
+  res.json({
+    data:keyword
+  });
+
+  // NSEAPI.searchStocks(keyword)
+  //   .then((response) => {
+  //     res.json({
+  //       error:false,
+  //       data:response.data
+  //     });
+  //   })
+  //   .catch((err) => {
+  //    // console.error(err.message)
+  //     res.json({
+  //       error:true,
+  //       message:err.message
+  //     });
+  //   });
 
 });
 
