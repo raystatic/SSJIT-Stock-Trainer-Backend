@@ -29,7 +29,7 @@ router.get('/search',(req, res, next) => {
      // console.error(err.message)
       res.json({
         error:true,
-        message:err.message
+        message:"this is error"
       });
     });
 
