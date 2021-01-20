@@ -7,6 +7,7 @@ const connection = require('./dbConfig');
 
 
 const loginRouter = require('./api/routes/login');
+const stockRouter = require('./api/routes/stock');
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -34,6 +35,7 @@ if(connection === null){
 app.use(express.json());
 
 app.use('/api/v1/login',loginRouter);
+app.use('/api/v1/stock',stockRouter);
 
 app.use('/',(req, res, next) => {
     
