@@ -12,6 +12,8 @@ router.get('/search',(req, res, next) => {
 
   const keyword = req.query.keyword;
 
+  console.log("ye chal rha hai")
+
   NSEAPI.searchStocks(keyword)
     .then((response) => {
       res.json({
@@ -20,13 +22,12 @@ router.get('/search',(req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(`Error: ${err.message}`)
+      console.log(`Error: ${err}`)
       res.json({
         error:true,
-        data:`Some error occurred`
+        message:`Some error occurred`
       });
     });
-
 });
 
 
