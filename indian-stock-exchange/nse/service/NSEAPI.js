@@ -223,7 +223,13 @@ function searchStocks(searchString) {
     transformResponse: searchTransformer(false)
   };
 
-  return axios.get(SEARCH_URL + encodeURIComponent(searchString), options);
+  try{
+    return axios.get(SEARCH_URL + encodeURIComponent(searchString), options);
+  }catch(err){
+    console.log("new seach err: "+err);
+  }
+
+  
 }
 
 function searchEquityDerivatives(searchString) {
