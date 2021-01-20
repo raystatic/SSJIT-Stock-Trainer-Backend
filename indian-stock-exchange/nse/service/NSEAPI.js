@@ -213,11 +213,12 @@ function getCandleStickData(symbol, time, isIndex) {
 }
 
 function searchStocks(searchString) {
+  console.log("this is new search block");
   var options = {
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
       'Referer': 'https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp',
-      Host: 'www.nseindia.com'
+      Host: 'www1.nseindia.com'
     },
     transformResponse: searchTransformer(false)
   };
