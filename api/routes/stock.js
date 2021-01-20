@@ -14,7 +14,7 @@ router.get('/search',(req, res, next) => {
 
   NSEAPI.searchStocks(keyword)
     .then((response) => {
-      console.log(`Success: ${response.data}`);
+      //console.log(`Success: ${response.data}`);
       res.json({
         error:false,
         data:response.data
