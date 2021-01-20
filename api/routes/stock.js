@@ -2,7 +2,7 @@ const { json } = require('body-parser');
 const express = require('express');
 const router = express.Router();
 
-const api = require('../../indian-stock-exchange');
+const api = require('indian-stock-exchange');
 
 
 
