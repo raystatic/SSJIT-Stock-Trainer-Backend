@@ -217,7 +217,7 @@ function searchStocks(searchString) {
   var options = {
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
-      'Referer': 'https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp',
+      'Referer': 'https://www1.nseindia.com/ChartApp/install/charts/mainpage.jsp',
       Host: 'www1.nseindia.com'
     },
     transformResponse: searchTransformer(false)
