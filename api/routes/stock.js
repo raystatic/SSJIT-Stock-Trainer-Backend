@@ -4,8 +4,6 @@ const router = express.Router();
 
 const api = require('indian-stock-exchange');
 
-
-
 const NSEAPI = api.NSE;
 
 const BSEAPI = api.BSE;
@@ -13,7 +11,7 @@ const BSEAPI = api.BSE;
 router.get('/search',(req, res, next) => {
 
   const keyword = req.query.keyword;
-  
+
   NSEAPI.searchStocks(keyword)
     .then((response) => {
       res.json({
