@@ -24,7 +24,7 @@ router.get('/search',(req, res, next) => {
     .catch((err) => {
       res.json({
         error:true,
-        message:err
+        message:err.message
       });
     });
 
