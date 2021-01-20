@@ -217,19 +217,13 @@ function searchStocks(searchString) {
   var options = {
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
-      'Referer': 'https://www1.nseindia.com/ChartApp/install/charts/mainpage.jsp',
-      Host: 'www1.nseindia.com'
+      'Referer': 'https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp',
+      Host: 'www.nseindia.com'
     },
     transformResponse: searchTransformer(false)
   };
 
-  try{
-    return axios.get(SEARCH_URL + encodeURIComponent(searchString), options);
-  }catch(err){
-    console.log("new seach err: "+err);
-  }
-
-  
+  return axios.get(SEARCH_URL + encodeURIComponent(searchString), options);
 }
 
 function searchEquityDerivatives(searchString) {
