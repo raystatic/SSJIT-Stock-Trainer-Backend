@@ -26,7 +26,7 @@ router.get('/search',(req, res, next) => {
       });
     })
     .catch((err) => {
-     // console.error(err.message)
+      console.log(`Error: ${err.message}`)
       res.json({
         error:true,
         message:`this is error 2`
