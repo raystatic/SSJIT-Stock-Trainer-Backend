@@ -13,6 +13,8 @@ const BSEAPI = api.BSE;
 router.get('/search',(req, res, next) => {
 
   const keyword = req.query.keyword;
+
+  console.log("search:",keyword);
   
   NSEAPI.searchStocks(keyword)
     .then((response) => {
