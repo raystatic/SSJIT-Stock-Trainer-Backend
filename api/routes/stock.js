@@ -124,7 +124,26 @@ router.post('/transaction', (req, res, next) => {
                   setTimeout(() => {
                     NSEAPI.getQuoteInfo(order.symbol)
                     .then((response) => {
-                      const freshPrice = parseFloat(response.data.data.buyPrice1.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice1.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice2.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice3.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice4.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice5.replace(',','').replace('-',''));
+                      var freshPrice = 0;
+                      if(response.data.data[0].buyPrice1.includes("-") && response.data.data[0].buyPrice2.includes("-") && response.data.data[0].buyPrice3.includes("-") && response.data.data[0].buyPrice4.includes("-") && response.data.data[0].buyPrice5.includes("-")){
+                        freshPrice = parseFloat(response.data.data[0].closePrice.replace(',',''));
+                      }else{
+                        if(!isNaN(parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-','')))){
+                          freshPrice+=parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-',''))
+                        }
+                        if(!isNaN(parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-','')))){
+                          freshPrice+=parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-',''))
+                        }
+                        if(!isNaN(parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-','')))){
+                          freshPrice+=parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-',''))
+                        }
+                        if(!isNaN(parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-','')))){
+                          freshPrice+=parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-',''))
+                        }
+                        if(!isNaN(parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-','')))){
+                          freshPrice+=parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-',''))
+                        }
+                      }
                       profit = order.order_amount.replace(',','') - freshPrice;
                       order.profit = profit;
                       order.status = OrderStatus.pending;
@@ -256,7 +275,26 @@ router.patch('/transaction', (req, res, next) => {
         const orderAmount = parseFloat(result[0].order_amount.replace(',',''));
         NSEAPI.getQuoteInfo(result[0].symbol)
           .then((response) => {
-            const freshPrice = parseFloat(response.data.data.buyPrice1.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice1.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice2.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice3.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice4.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice5.replace(',','').replace('-',''));
+            var freshPrice = 0;
+            if(response.data.data[0].buyPrice1.includes("-") && response.data.data[0].buyPrice2.includes("-") && response.data.data[0].buyPrice3.includes("-") && response.data.data[0].buyPrice4.includes("-") && response.data.data[0].buyPrice5.includes("-")){
+              freshPrice = parseFloat(response.data.data[0].closePrice.replace(',',''));
+            }else{
+              if(!isNaN(parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-','')))){
+                freshPrice+=parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-',''))
+              }
+              if(!isNaN(parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-','')))){
+                freshPrice+=parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-',''))
+              }
+              if(!isNaN(parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-','')))){
+                freshPrice+=parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-',''))
+              }
+              if(!isNaN(parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-','')))){
+                freshPrice+=parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-',''))
+              }
+              if(!isNaN(parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-','')))){
+                freshPrice+=parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-',''))
+              }
+            }
             console.log(`${response.data.data.closePrice}, ${freshPrice}, ${result[0].order_amount}, ${orderAmount}`)
             profit = freshPrice - orderAmount;
             order.profit = profit;
