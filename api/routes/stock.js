@@ -341,6 +341,46 @@ router.patch('/transaction', (req, res, next) => {
   });
 });
 
+async function fetchCurrentPrice(orders, res){
+  const d = [];
+  for(order in orders){
+    const data = await NSEAPI.getQuoteInfo(orders[order].symbol)
+                        .then((response) => {
+                          return response.data.data[0];
+                        });
+
+     var freshPrice = 0;
+    if(data.buyPrice1.includes("-") && data.buyPrice1.includes("-") && data.buyPrice2.includes("-") && data.buyPrice3.includes("-") && data.buyPrice4.includes("-") && data.buyPrice5.includes("-")){
+      freshPrice = parseFloat(data.closePrice.replace(',',''));
+    }else{
+      if(!isNaN(parseFloat(data.buyPrice1.replace(',','').replace('-','')))){
+        freshPrice+=parseFloat(data.buyPrice1.replace(',','').replace('-',''))
+      }
+      if(!isNaN(parseFloat(data.buyPrice2.replace(',','').replace('-','')))){
+        freshPrice+=parseFloat(data.buyPrice2.replace(',','').replace('-',''))
+      }
+      if(!isNaN(parseFloat(data.buyPrice3.replace(',','').replace('-','')))){
+        freshPrice+=parseFloat(data.buyPrice3.replace(',','').replace('-',''))
+      }
+      if(!isNaN(parseFloat(data.buyPrice4.replace(',','').replace('-','')))){
+        freshPrice+=parseFloat(data.buyPrice4.replace(',','').replace('-',''))
+      }
+      if(!isNaN(parseFloat(data.buyPrice5.replace(',','').replace('-','')))){
+        freshPrice+=parseFloat(data.buyPrice5.replace(',','').replace('-',''))
+      }
+    }
+    orders[order].currentPrice = freshPrice;
+    orders[order].companyName = data.companyName;
+    d.push(orders[order]); 
+  }
+
+  res.json({
+    error:false,
+    orders:d
+  });
+
+}
+
 
 router.get('/transaction', (req, res, next) => {
   const userId = req.query.userId
@@ -359,10 +399,8 @@ router.get('/transaction', (req, res, next) => {
           message:"No orders found of the current user"
         });
       }else{
-        res.json({
-          error:false,
-          orders:result
-        });
+        const orders = result;
+        fetchCurrentPrice(orders, res);
       }
     }
   })
