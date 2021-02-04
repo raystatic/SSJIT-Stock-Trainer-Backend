@@ -51,17 +51,22 @@ router.get('/stock_info',(req, res, next) => {
 
 });
 
-router.get('/buy_stock',(req, res, next) => {
-
-  const now = new Date();
-  const eta_ms = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 0).getTime() - Date.now();
-
-  res.json({
-    data:now.getDate()+1
-  })
-
-})
-
+const executeTransaction = (order) => {
+  const updateOrderQuery = `UPDATE orders SET ? WHERE id= ?`;
+  order.status = OrderStatus.executed;
+  order.order_executed_at = new Date().getTime();
+  connection.query(updateOrderQuery,[order, order.id], (err, result) => {
+    if(err){
+      console.log(`Cannot update order: ${err}`);
+    }else{
+      if(result === null){
+        console.log("order not find");
+      }else{
+        console.log("order updated");
+      }
+    }
+  });
+}
 
 router.post('/transaction', (req, res, next) => {
     const order = {
@@ -72,20 +77,30 @@ router.post('/transaction', (req, res, next) => {
       order_created_at : req.body.orderCreatedAt,
       user_id : req.body.userId,
       order_amount : req.body.orderAmount,
-      intraday : req.body.intraday
+      intraday : req.body.intraday,
+      type: req.body.type
     };
 
     const getUserDetails = "SELECT * FROM users WHERE id= ?"
     connection.query(getUserDetails,[order.user_id], (err, user) => {
       if(err){
-        console.error(`Cannot get user with this id`);
         res.json({
           error:true,
-          message:`Cannot find user`
+          message:err.message
         });
       }else{
+
+        if(user === null || user.length === 0){
+          res.json({
+            error:true,
+            message:`Cannot find user`
+          });
+          return;
+        }
+
         const now = new Date();
         const eta_ms = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 0).getTime() - Date.now();
+        const eta_1day = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()+2).getTime() - Date.now();
 
         if(order.intraday && eta_ms <= 0){
             res.json({
@@ -98,33 +113,53 @@ router.post('/transaction', (req, res, next) => {
           const updateProfitQuery = "UPDATE users SET ? WHERE id= ?";
           connection.query(createOrderQuery, order, (err, result) => {
             if(err){
+              console.log(err);
               res.json({
                 error:true,
                 message:err
               });
             }else{
               if(result!==null){
-                if(order.intraday){
+                if(order.intraday && order.type == "BUY"){
                   setTimeout(() => {
                     NSEAPI.getQuoteInfo(order.symbol)
                     .then((response) => {
-                      const freshPrice = parseFloat(response.data.data.closePrice.replace(',',''));
+                      const freshPrice = parseFloat(response.data.data.buyPrice1.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice1.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice2.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice3.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice4.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice5.replace(',','').replace('-',''));
                       profit = order.order_amount.replace(',','') - freshPrice;
                       order.profit = profit;
-                      order.order_executed_at = (new Date()).getTime();
-                      order.status = OrderStatus.executed;
+                      order.status = OrderStatus.pending;
+                      order.type = "SELL"
                       const updateQuery = `UPDATE orders SET ? WHERE id= ?`;
                       connection.query(updateQuery, [order,order.id],(err, updatedOrder) => {
                         if(err){
-                        console.error(`Cannot execute order ${err}`);
+                        console.error(`Cannot update order ${err}`);
                         }else{
                           connection.query(getUserDetails, [order.user_id], (err, newUser) => {
                             if(err){
                               console.log("cannot find user");
                             }else{
                               const balance = parseFloat(user[0].balance.replace(',','')) + freshPrice;
-                              const netProfit = parseFloat(user[0].profit.replace(',','')) + order.profit;
-                              connection.query(updateProfitQuery,[{balance:balance, profit:netProfit}, order.user_id], (err, updatedUser) => {
+                              var netProfit = parseFloat(user[0].profit.replace(',',''));
+                              var netLoss = parseFloat(user[0].loss.replace(',',''));
+                              if(order.profit >= 0){
+                                netProfit+=order.profit;
+                              }else{
+                                netLoss+=order.profit;
+                              }
+                              var positive_transactions = user[0].positive_transactions;
+                              var negative_transactions = user[0].negative_transactions;
+                              if(order.profit >= 0){
+                                positive_transactions+=1;
+                              }else{
+                                negative_transactions+=1
+                              }
+                              connection.query(updateProfitQuery,[{
+                                  balance:balance, 
+                                  profit:netProfit,
+                                  loss:netLoss,
+                                  positive_transaction: positive_transactions,
+                                  negative_transaction: negative_transactions
+                                }, order.user_id], (err, updatedUser) => {
                                 if(err){
                                   console.log(`${err}`);
                                   res.json({
@@ -133,7 +168,10 @@ router.post('/transaction', (req, res, next) => {
                                   })
                                 }else{
                                   console.log("user's balance updated");
-                                  console.log("Order successfully executed");
+                                  console.log("Sell Order successfully created");
+                                  setTimeout(() => {
+                                    executeTransaction(order);
+                                  }, eta_1day);
                                 }
                               })
                             }
@@ -150,8 +188,15 @@ router.post('/transaction', (req, res, next) => {
                     })
                   }, eta_ms)
                 }
-                const balance = parseFloat(user[0].balance.replace(',','')) - parseFloat(order.order_amount);
-                const investment = parseFloat(user[0].investment.replace(',','')) + parseFloat(order.order_amount);
+                var balance = parseFloat(user[0].balance.replace(',',''));
+                var investment = parseFloat(user[0].investment.replace(',',''));
+                if(order.type == "BUY"){
+                  balance = balance - parseFloat(order.order_amount);
+                  investment = investment + parseFloat(order.order_amount);
+                }else{
+                  balance = balance + parseFloat(order.order_amount);
+                }
+
                 const updates = {balance:`${balance}`,investment:`${investment}`};
                 connection.query(updateBalanceQuery,[updates, order.user_id], (err, updatedUser) => {
                   if(err){
@@ -161,9 +206,19 @@ router.post('/transaction', (req, res, next) => {
                     })
                   }else{
                     console.log("user's balance updated");
+                    if(order.intraday){
+                      order.intraday = 1;
+                    }else{
+                      order.intraday = 0;
+                    }
+                    const now = new Date();
+                    const eta_1day = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()+2).getTime() - Date.now();
+                    setTimeout(() => {
+                        executeTransaction(order);
+                    }, eta_1day)
                     res.json({
                       error:false,
-                      orderId:order
+                      order:order
                     });
                   }
                 })
@@ -196,18 +251,16 @@ router.patch('/transaction', (req, res, next) => {
         message:`Error: ${err}`
       });
     }else{
-      if(result !== null){
+      if(result !== null && result.length > 0){
         order = result[0];
         const orderAmount = parseFloat(result[0].order_amount.replace(',',''));
         NSEAPI.getQuoteInfo(result[0].symbol)
           .then((response) => {
-            const freshPrice = parseFloat(response.data.data[0].closePrice.replace(',',''));
+            const freshPrice = parseFloat(response.data.data.buyPrice1.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice1.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice2.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice3.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice4.replace(',','').replace('-','')) + parseFloat(response.data.data.buyPrice5.replace(',','').replace('-',''));
             console.log(`${response.data.data.closePrice}, ${freshPrice}, ${result[0].order_amount}, ${orderAmount}`)
             profit = freshPrice - orderAmount;
-            const now = new Date();
             order.profit = profit;
-            order.order_executed_at = now.getTime();
-            order.status = OrderStatus.executed;
+            order.status = OrderStatus.pending;
             const updateQuery = `UPDATE orders SET ? WHERE id= ?`;
             connection.query(updateQuery, [order, order.id],(err, updatedOrder) => {
               if(err){
@@ -225,10 +278,22 @@ router.patch('/transaction', (req, res, next) => {
                       })
                     } else{
                       if(user !== null && user.length !== 0){
-                        console.log(user);
                         const balance = parseFloat(user[0].balance.replace(',','')) + freshPrice;
-                        const netProfit = parseFloat(user[0].profit.replace(',','')) + order.profit;
-                        const updates = {balance: balance, profit: netProfit};
+                        var netProfit = parseFloat(user[0].profit.replace(',',''));
+                        var netLoss = parseFloat(user[0].loss.replace(',',''));
+                        if(order.profit >= 0){
+                          netProfit+=order.profit;
+                        }else{
+                          netLoss+=order.profit;
+                        }
+                        var positiveTransactions = user[0].positive_transactions;
+                        var negativeTransactions = user[0].negative_transactions;
+                        if(order.profit >= 0){
+                          positiveTransactions+=1;
+                        }else{
+                          negativeTransactions+=1
+                        }
+                        const updates = {balance: balance, profit: netProfit,loss:netLoss, positive_transactions:positiveTransactions, negative_transactions: negativeTransactions};
                         connection.query(updateBalanceQuery,[updates,order.user_id], (err, updatedUser) => {
                           if(err){
                             res.json({
@@ -237,6 +302,11 @@ router.patch('/transaction', (req, res, next) => {
                             });
                           }else{
                             console.log(`User's balance updated`);
+                            const now = new Date();
+                            const eta_1day = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()+2).getTime() - Date.now();
+                            setTimeout(() => {
+                                executeTransaction(updatedOrder);
+                            }, eta_1day)
                             res.json({
                               error:false,
                               data: updatedOrder
@@ -269,6 +339,34 @@ router.patch('/transaction', (req, res, next) => {
       }
     }
   });
+});
+
+
+router.get('/transaction', (req, res, next) => {
+  const userId = req.query.userId
+
+  const getOrderQuery = `SELECT * FROM orders WHERE user_id= ?`;
+  connection.query(getOrderQuery,[userId],(err, result) => {
+    if(err){
+      res.json({
+        error:true,
+        message:err
+      });
+    }else{
+      if(result === null){
+        res.json({
+          error:true,
+          message:"No orders found of the current user"
+        });
+      }else{
+        res.json({
+          error:false,
+          orders:result
+        });
+      }
+    }
+  })
+
 });
 
 module.exports = router;

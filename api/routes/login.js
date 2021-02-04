@@ -19,12 +19,13 @@ router.post('/', (req, res, next) => {
     };
 
 
-    const isUserExistQuery = `SELECT * FROM users WHERE email='${user.email}'`;
+    const isUserExistQuery = `SELECT * FROM users WHERE email= ?`;
 
     const insertUserQuery = `INSERT INTO users SET ?`;
 
-    connection.query(isUserExistQuery, (err, rows) => {
+    connection.query(isUserExistQuery,[user.email], (err, rows) => {
         if(err){
+            console.log(`${err} : ${rows}`);
             res.json({
                 error:true,
                 message:`${err}`
@@ -42,7 +43,7 @@ router.post('/', (req, res, next) => {
                         if(result !== null){    
                             res.json({
                                 error:false,
-                                user:user 
+                                user:result[0]
                             });
                         }else{
                             res.json({
@@ -54,6 +55,12 @@ router.post('/', (req, res, next) => {
                 })
             }else{
                 user.id = rows[0].id
+                user.balance = rows[0].balance;
+                user.investment = rows[0].investment;
+                user.profit = rows[0].profit;
+                user.loss = rows[0].loss;
+                user.positive_transactions = rows[0].positive_transactions;
+                user.negative_transactions = rows[0].negative_transactions;
                 const updateUserQuery = `UPDATE users SET ? WHERE id = ?`;
                 connection.query(updateUserQuery,[user, user.id], (err, result) => {
                     if(err){
@@ -63,6 +70,7 @@ router.post('/', (req, res, next) => {
                         });
                     }else{
                         if(result !== null){
+                            console.log(user);
                              res.json({
                                 error:false,
                                 user:user 
