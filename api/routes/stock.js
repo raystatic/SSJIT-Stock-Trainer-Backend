@@ -124,26 +124,28 @@ router.post('/transaction', (req, res, next) => {
                   setTimeout(() => {
                     NSEAPI.getQuoteInfo(order.symbol)
                     .then((response) => {
-                      var freshPrice = 0;
-                      if(response.data.data[0].buyPrice1.includes("-") && response.data.data[0].buyPrice2.includes("-") && response.data.data[0].buyPrice3.includes("-") && response.data.data[0].buyPrice4.includes("-") && response.data.data[0].buyPrice5.includes("-")){
-                        freshPrice = parseFloat(response.data.data[0].closePrice.replace(',',''));
-                      }else{
-                        if(!isNaN(parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-','')))){
-                          freshPrice+=parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-',''))
-                        }
-                        if(!isNaN(parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-','')))){
-                          freshPrice+=parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-',''))
-                        }
-                        if(!isNaN(parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-','')))){
-                          freshPrice+=parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-',''))
-                        }
-                        if(!isNaN(parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-','')))){
-                          freshPrice+=parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-',''))
-                        }
-                        if(!isNaN(parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-','')))){
-                          freshPrice+=parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-',''))
-                        }
-                      }
+                      // var freshPrice = 0;
+                      // if(response.data.data[0].buyPrice1.includes("-") && response.data.data[0].buyPrice2.includes("-") && response.data.data[0].buyPrice3.includes("-") && response.data.data[0].buyPrice4.includes("-") && response.data.data[0].buyPrice5.includes("-")){
+                      //   freshPrice = parseFloat(response.data.data[0].closePrice.replace(',',''));
+                      // }else{
+                      //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-','')))){
+                      //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-',''))
+                      //   // }
+                      //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-','')))){
+                      //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-',''))
+                      //   // }
+                      //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-','')))){
+                      //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-',''))
+                      //   // }
+                      //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-','')))){
+                      //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-',''))
+                      //   // }
+                      //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-','')))){
+                      //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-',''))
+                      //   // }
+                      //   freshPrice = parseFloat(response.data.data[0].lastPrice.replace(',',''));
+                      // }
+                      freshPrice = parseFloat(response.data.data[0].lastPrice.replace(',',''))
                       profit = order.order_amount.replace(',','') - freshPrice;
                       order.profit = profit;
                       order.status = OrderStatus.pending;
@@ -275,26 +277,28 @@ router.patch('/transaction', (req, res, next) => {
         const orderAmount = parseFloat(result[0].order_amount.replace(',',''));
         NSEAPI.getQuoteInfo(result[0].symbol)
           .then((response) => {
-            var freshPrice = 0;
-            if(response.data.data[0].buyPrice1.includes("-") && response.data.data[0].buyPrice2.includes("-") && response.data.data[0].buyPrice3.includes("-") && response.data.data[0].buyPrice4.includes("-") && response.data.data[0].buyPrice5.includes("-")){
-              freshPrice = parseFloat(response.data.data[0].closePrice.replace(',',''));
-            }else{
-              if(!isNaN(parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-','')))){
-                freshPrice+=parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-',''))
-              }
-              if(!isNaN(parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-','')))){
-                freshPrice+=parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-',''))
-              }
-              if(!isNaN(parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-','')))){
-                freshPrice+=parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-',''))
-              }
-              if(!isNaN(parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-','')))){
-                freshPrice+=parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-',''))
-              }
-              if(!isNaN(parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-','')))){
-                freshPrice+=parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-',''))
-              }
-            }
+            // var freshPrice = 0;
+            // if(response.data.data[0].buyPrice1.includes("-") && response.data.data[0].buyPrice2.includes("-") && response.data.data[0].buyPrice3.includes("-") && response.data.data[0].buyPrice4.includes("-") && response.data.data[0].buyPrice5.includes("-")){
+            //   freshPrice = parseFloat(response.data.data[0].closePrice.replace(',',''));
+            // }else{
+            //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-','')))){
+            //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice1.replace(',','').replace('-',''))
+            //   // }
+            //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-','')))){
+            //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice2.replace(',','').replace('-',''))
+            //   // }
+            //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-','')))){
+            //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice3.replace(',','').replace('-',''))
+            //   // }
+            //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-','')))){
+            //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice4.replace(',','').replace('-',''))
+            //   // }
+            //   // if(!isNaN(parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-','')))){
+            //   //   freshPrice+=parseFloat(response.data.data[0].buyPrice5.replace(',','').replace('-',''))
+            //   // }
+            //   freshPrice = parseFloat(response.data.data[0].lastPrice.replace(',',''));
+            // }
+            freshPrice = parseFloat(response.data.data[0].lastPrice.replace(',',''));
             console.log(`${response.data.data.closePrice}, ${freshPrice}, ${result[0].order_amount}, ${orderAmount}`)
             profit = freshPrice - orderAmount;
             order.profit = profit;
@@ -388,25 +392,35 @@ async function fetchCurrentPrice(orders, res){
                         });
 
      var freshPrice = 0;
-    if(data.buyPrice1.includes("-") && data.buyPrice1.includes("-") && data.buyPrice2.includes("-") && data.buyPrice3.includes("-") && data.buyPrice4.includes("-") && data.buyPrice5.includes("-")){
-      freshPrice = parseFloat(data.closePrice.replace(',',''));
-    }else{
-      if(!isNaN(parseFloat(data.buyPrice1.replace(',','').replace('-','')))){
-        freshPrice+=parseFloat(data.buyPrice1.replace(',','').replace('-',''))
-      }
-      if(!isNaN(parseFloat(data.buyPrice2.replace(',','').replace('-','')))){
-        freshPrice+=parseFloat(data.buyPrice2.replace(',','').replace('-',''))
-      }
-      if(!isNaN(parseFloat(data.buyPrice3.replace(',','').replace('-','')))){
-        freshPrice+=parseFloat(data.buyPrice3.replace(',','').replace('-',''))
-      }
-      if(!isNaN(parseFloat(data.buyPrice4.replace(',','').replace('-','')))){
-        freshPrice+=parseFloat(data.buyPrice4.replace(',','').replace('-',''))
-      }
-      if(!isNaN(parseFloat(data.buyPrice5.replace(',','').replace('-','')))){
-        freshPrice+=parseFloat(data.buyPrice5.replace(',','').replace('-',''))
-      }
-    }
+    // if(data.buyPrice1.includes("-") && data.buyPrice1.includes("-") && data.buyPrice2.includes("-") && data.buyPrice3.includes("-") && data.buyPrice4.includes("-") && data.buyPrice5.includes("-")){
+    //   freshPrice = parseFloat(data.closePrice.replace(',',''));
+    // }else{
+    //   // if(!isNaN(parseFloat(data.buyPrice1.replace(',','').replace('-','')))){
+    //   //   freshPrice+=parseFloat(data.buyPrice1.replace(',','').replace('-',''))
+    //   // }
+    //   // if(!isNaN(parseFloat(data.buyPrice2.replace(',','').replace('-','')))){
+    //   //   freshPrice+=parseFloat(data.buyPrice2.replace(',','').replace('-',''))
+    //   // }
+    //   // if(!isNaN(parseFloat(data.buyPrice3.replace(',','').replace('-','')))){
+    //   //   freshPrice+=parseFloat(data.buyPrice3.replace(',','').replace('-',''))
+    //   // }
+    //   // if(!isNaN(parseFloat(data.buyPrice4.replace(',','').replace('-','')))){
+    //   //   freshPrice+=parseFloat(data.buyPrice4.replace(',','').replace('-',''))
+    //   // }
+    //   // if(!isNaN(parseFloat(data.buyPrice5.replace(',','').replace('-','')))){
+    //   //   freshPrice+=parseFloat(data.buyPrice5.replace(',','').replace('-',''))
+    //   // }
+    //   freshPrice = parseFloat(data.lastPrice.replace(',',''));
+    // }
+
+    // if(parseFloat(data.closePrice.replace(',','')) > 0){
+    //   freshPrice = parseFloat(data.closePrice.replace(',',''))
+    // }else{
+    //   freshPrice = parseFloat(data.closePrice.replace(',',''))
+    // }
+
+    freshPrice = parseFloat(data.lastPrice.replace(',',''))
+
     orders[order].currentPrice = freshPrice;
     orders[order].companyName = data.companyName;
     d.push(orders[order]); 
@@ -443,6 +457,20 @@ router.get('/transaction', (req, res, next) => {
     }
   })
 
+});
+
+router.get('/futures',(req, res, next) => {
+  NSEAPI.getIndexFuturesData("RELIANCE")
+    .then((response) => {
+      res.json({
+        futures:response
+      });
+    })
+    .catch((err)=> {
+      res.json({
+        error:err
+      });
+    })
 });
 
 module.exports = router;
