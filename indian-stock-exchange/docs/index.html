@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Indian Stock Exchange NSEAPI</h1><ul>
+<li>Provides API to get Data from National Stock Exchange</li>
+</ul>
+<h2>IMPORTANT</h2><blockquote>
+<p>API Calls will fail when made from browser due to 'OPTIONS' request sent by browsers before making an API call and Have few 'insecure' headers set which fails when changed from browser.</p>
+</blockquote>
+<blockquote>
+<p>Workaround is to make the call either on your server or in your app. </p>
+</blockquote>
+<h1>Installation</h1><ul>
+<li>Make sure nodejs is installed on your system</li>
+<li>run <code>npm install --save indian-stock-exchange</code> or <code>yarn add indian-stock-exchange</code></li>
+</ul>
+<h1>Instructions on How to Use</h1><pre class="prettyprint source lang-javascript"><code>var API = require('indian-stock-exchange');
+
+var NSEAPI = API.NSE;
+var BSEAPI = API.BSE;
+
+
+// Examples
+
+NSEAPI.getIndices()
+.then(function (response) { 
+  console.log(response.data); //return the api data
+});
+
+BSEAPI.getIndices()
+.then(function (response) { 
+  console.log(response.data); //return the api data
+});
+</code></pre><h2>BSE (WIP)</h2><h3>Available Methods</h3><ul>
+<li>getTopTurnOvers</li>
+<li>getIndices</li>
+<li>getGainers</li>
+<li>getLosers</li>
+<li>getStockInfoAndDayChartData(securityCode)</li>
+<li>getCompanyInfo(securityCode)</li>
+<li>getStockMarketDepth(securityCode)</li>
+<li>getStocksChartData(securityCode, flag=[5D, 1M, 3M, 6M, 12M]) ## BSE</li>
+<li>getIndexChartData(symbolKey, time=[1|1M|3M|6M|12M])</li>
+<li>getIndexStocks(symbolKey)</li>
+<li>getIndexInfo(symbolKey)</li>
+<li><p>getStockCandleStickData(securityCode, flag=[1D|1Y]) <strong>(when using '1Y' as time, will return all data for the stock, you can filter out data accordingly for week wise or month wise data)</strong></p>
+<p>***<code>symbolKey</code> is different from <code>symbol</code> or <code>securityCode</code>, this value is present in response of getIndices method in 'key' property</p>
+<h2>NSE (WIP, actively working)</h2><h3>Available Methods</h3></li>
+<li><p>getMarketStatus
+Response Format</p>
+<pre class="prettyprint source"><code>  { status: 'closed/open' }</code></pre></li>
+</ul>
+<hr>
+<ul>
+<li>getIndices
+Response Format<pre class="prettyprint source"><code> {
+     data: [ 
+       { 
+         timeVal: 'Time when the stock info was last updated',
+         indexName: 'Stock symbol',
+         previousClose: 'previous close value',
+         open: 'open value',
+         high: 'high value',
+         low: 'low value',
+         last: 'Last stock value',
+         percChange: 'percent change in stock price, -ve/+ve values',
+         yearHigh: '52week highest value',
+         yearLow: '52week lowest value',
+         indexOrder: 'some random value, not important',
+      },
+      ...
+     ],
+ }</code></pre></li>
+</ul>
+<hr>
+<ul>
+<li>getIndices2</li>
+</ul>
+<hr>
+<ul>
+<li><del>getAllStocksCSV</del> (broken)</li>
+</ul>
+<hr>
+<ul>
+<li>getGainers
+Response Format<pre class="prettyprint source"><code> {
+   data: [ 
+           { 
+             symbol: 'VEDL',
+             series: 'EQ',
+             openPrice: '214.00',
+             highPrice: '225.00',
+             lowPrice: '212.25',
+             ltp: '223.50',
+             previousPrice: '214.80',
+             netPrice: '4.05',
+             tradedQuantity: '1,20,31,227',
+             turnoverInLakhs: '26,376.06',
+             lastCorpAnnouncementDate: '14-Aug-2018',
+             lastCorpAnnouncement: 'Annual General Meeting',
+           },
+           ...
+        ]
+ }</code></pre></li>
+</ul>
+<hr>
+<ul>
+<li>getLosers
+Response Format<pre class="prettyprint source"><code>  {
+    data: [ 
+            { 
+              symbol: 'VEDL',
+              series: 'EQ',
+              openPrice: '214.00',
+              highPrice: '225.00',
+              lowPrice: '212.25',
+              ltp: '223.50',
+              previousPrice: '214.80',
+              netPrice: '4.05',
+              tradedQuantity: '1,20,31,227',
+              turnoverInLakhs: '26,376.06',
+              lastCorpAnnouncementDate: '14-Aug-2018',
+              lastCorpAnnouncement: 'Annual General Meeting',
+            },
+            ...
+         ]
+  }</code></pre></li>
+</ul>
+<hr>
+<ul>
+<li>getSectorsList
+Response Format<pre class="prettyprint source"><code> {
+   data: {
+     [STOCK SYMBOL]: { 
+             date: '24-Aug-2018 06:45:03',
+             symbol: 'STOCK SYMBOL VALUE',
+             PE: '21.04',
+             sectorPE: '15.17',
+             sector: 'NIFTY METAL' 
+     },
+     ...
+     }
+ } </code></pre></li>
+</ul>
+<hr>
+<ul>
+<li>getQuoteInfo(symbol)
+Response Format<pre class="prettyprint source"><code>{
+data: { 
+ tradedDate: '24AUG2018',
+ data: [ 
+     { 
+        pricebandupper: '2,238.60',
+        symbol: 'TCS',
+        applicableMargin: '12.50',
+        bcEndDate: '-',
+        totalSellQuantity: '1,107',
+        adhocMargin: '-',
+        companyName: 'Tata Consultancy Services Limited',
+        marketType: 'N',
+        exDate: '14-AUG-18',
+        bcStartDate: '-',
+        css_status_desc: 'Listed',
+        dayHigh: '2,046.00',
+        basePrice: '2,035.10',
+        securityVar: '3.36',
+        pricebandlower: '1,831.60',
+        sellQuantity5: '-',
+        sellQuantity4: '-',
+        sellQuantity3: '-',
+        cm_adj_high_dt: '25-MAY-18',
+        sellQuantity2: '-',
+        dayLow: '2,031.00',
+        sellQuantity1: '1,107',
+        quantityTraded: '30,46,791',
+        pChange: '0.32',
+        totalTradedValue: '32,067.93',
+        deliveryToTradedQuantity: '73.17',
+        totalBuyQuantity: '-',
+        averagePrice: '2,041.85',
+        indexVar: '-',
+        cm_ffm: '2,18,162.93',
+        purpose: 'BUYBACK',
+        buyPrice2: '-',
+        secDate: '23AUG2018',
+        buyPrice1: '-',
+        high52: '3,674.80',
+        previousClose: '2,035.10',
+        ndEndDate: '-',
+        low52: '1,711.15',
+        buyPrice4: '-',
+        buyPrice3: '-',
+        recordDate: '18-AUG-18',
+        deliveryQuantity: '22,29,341',
+        buyPrice5: '-',
+        priceBand: 'No Band',
+        extremeLossMargin: '5.00',
+        cm_adj_low_dt: '05-JUN-18',
+        varMargin: '7.50',
+        sellPrice1: '2,043.00',
+        sellPrice2: '-',
+        totalTradedVolume: '15,70,533',
+        sellPrice3: '-',
+        sellPrice4: '-',
+        sellPrice5: '-',
+        change: '6.50',
+        surv_indicator: '-',
+        ndStartDate: '-',
+        buyQuantity4: '-',
+        isExDateFlag: false,
+        buyQuantity3: '-',
+        buyQuantity2: '-',
+        buyQuantity1: '-',
+        series: 'EQ',
+        faceValue: '1.00',
+        buyQuantity5: '-',
+        closePrice: '0.00',
+        open: '2,035.10',
+        isinCode: 'INE467B01029',
+        lastPrice: '2,041.60',
+     }
+ ],
+ otherSeries: [ 'EQ' ],
+ lastUpdateTime: '24-AUG-2018 16:00:00',
+}
+}</code></pre><hr>
+</li>
+<li><h2><del>getQuotes(symbol)</del></h2></li>
+<li><p>getInclineDecline
+Response Format</p>
+<pre class="prettyprint source lang-{"><code>   data: {
+      data: [
+         { 
+           indice: 'INDEX SYMBOL VALUE',
+           advances: '21',
+           declines: '28',
+           unchanged: '1',
+         },
+       ...
+     ]
+   }
+}</code></pre><hr>
+</li>
+<li><p>getIndexStocks(slug) =&gt; see below code for slug values for different indices</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li>getIndexChartData(symbol, time) =&gt; time values = (1, 5, 15, 30, 60, 'week', 'month', 'year') // pass int values as integer and not string (!important)</li>
+</ul>
+<hr>
+<ul>
+<li>getIntraDayData(symbol, time) =&gt; time values = (1, 5, 15, 30, 60, 'week', 'month', 'year') // pass int values as integer and not string (!important)</li>
+</ul>
+<hr>
+<ul>
+<li>getCandleStickData(symbol, time, isIndex: boolean) =&gt; time values as above, isIndex param to fetch data for indices</li>
+</ul>
+<hr>
+<ul>
+<li>searchStocks(string) =&gt; search stocks by name or symbol (min 3 chars)</li>
+</ul>
+<hr>
+<ul>
+<li>searchEquityDerivatives(string) =&gt; search Equity Derivatives (min 3 chars) (! provides wrapper around site search)</li>
+</ul>
+<hr>
+<ul>
+<li>getStockFutureOptionsExpiryDates(symbol, isFutures? boolean, isIndex? boolean)</li>
+</ul>
+<hr>
+<ul>
+<li>getStockOptionsPrices(symbol, expiryDate, isCall? boolean, isIndex? boolean) expiryDate value must be from one of values returned by above methods</li>
+</ul>
+<hr>
+<ul>
+<li>getStockOptionsData(symbol, expiryDate, isCall, strikePrice, isIndex) strikePrice value from above api result only</li>
+</ul>
+<hr>
+<ul>
+<li>getStockFuturesData(symbol, expiryDate, isIndex) expiryDate from api method only</li>
+</ul>
+<hr>
+<ul>
+<li>getFuturesData(symbol) =&gt; wrapper around <code>getStockFuturesData</code> and <code>getStockFutureOptionsExpiryDates</code> and return all-together.</li>
+</ul>
+<hr>
+<ul>
+<li>getOptionsData(symbol) =&gt; wrapper around <code>getStockOptionsPrices</code> and <code>getStockFutureOptionsExpiryDates</code> and returns list of all call and put prices for all the expiry Dates of a stock</li>
+</ul>
+<hr>
+<ul>
+<li>getIndexFuturesData(symbol)</li>
+</ul>
+<hr>
+<ul>
+<li><p>getIndexOptionsData(symbol)</p>
+</li>
+<li><p>get52WeekHigh</p>
+</li>
+<li><p>get52WeekLow</p>
+</li>
+<li><p>getTopValueStocks</p>
+</li>
+<li><p>getTopVolumeStocks</p>
+<p>** valid symbols for Index Futures and Options are <code>[&quot;BANKNIFTY&quot;,&quot;FTSE100&quot;,&quot;NIFTY&quot;,&quot;NIFTYINFRA&quot;,&quot;NIFTYIT&quot;,&quot;NIFTYMID50&quot;,&quot;NIFTYPSE&quot;]</code></p>
+</li>
+</ul>
+<h2>Slug List</h2><pre class="prettyprint source lang-javascript"><code>
+ {
+  'NIFTY 50': 'nifty',
+  'NIFTY NEXT 50': 'juniorNifty',
+  'NIFTY MIDCAP 50': 'niftyMidcap50',
+  'NIFTY AUTO': 'cnxAuto',
+  'NIFTY BANK': 'bankNifty',
+  'NIFTY ENERGY': 'cnxEnergy',
+  'NIFTY FIN SERVICE': 'cnxFinance',
+  'NIFTY FMCG': 'cnxFMCG',
+  'NIFTY IT': 'cnxit',
+  'NIFTY MEDIA': 'cnxMedia',
+  'NIFTY METAL': 'cnxMetal',
+  'NIFTY PHARMA': 'cnxPharma',
+  'NIFTY PSU BANK': 'cnxPSU',
+  'NIFTY REALTY': 'cnxRealty',
+  'NIFTY PVT BANK': 'niftyPvtBank',
+  'NIFTY COMMODITIES': 'cnxCommodities',
+  'NIFTY CONSUMPTION': 'cnxConsumption',
+  'NIFTY CPSE': 'cpse',
+  'NIFTY INFRA': 'cnxInfra',
+  'NIFTY MNC': 'cnxMNC',
+  'NIFTY GROWSECT 15': 'ni15',
+  'NIFTY PSE': 'cnxPSE',
+  'NIFTY SERV SECTOR': 'cnxService',
+  'NIFTY100 LIQ 15': 'nseliquid',
+  'NIFTY MID LIQ 15': 'niftyMidcapLiq15',
+  'NIFTY DIV OPPS 50': 'cnxDividendOppt',
+  'NIFTY50 VALUE 20': 'nv20',
+  'NIFTY QUALITY 30': 'niftyQuality30',
+  'NIFTY50 EQL WGT': 'nifty50EqualWeight',
+  'NIFTY100 EQL WGT': 'nifty100EqualWeight',
+  'NIFTY100 LOWVOL30': 'nifty100LowVolatility30',
+  'NIFTY ALPHA 50': 'niftyAlpha50',
+
+
+  'INDIA VIX': '-',
+  'NIFTY 100': '-',
+  'NIFTY 500': '-',
+  'NIFTY MIDCAP 100': '-',
+  'NIFTY GS 11 15YR': '-',
+  'NIFTY50 PR 1X INV': '-',
+  'NIFTY GS COMPSITE': '-',
+  'NIFTY GS 15YRPLUS': '-',
+  'NIFTY50 PR 2X LEV': '-',
+  'NIFTY50 TR 1X INV': '-',
+  'NIFTY 200': '-',
+  'NIFTY GS 4 8YR': '-',
+  'NIFTY GS 8 13YR': '-',
+  'NIFTY50 TR 2X LEV': '-',
+  'NIFTY50 DIV POINT': '-',
+  'NIFTY SMLCAP 100': '-',
+  'NIFTY GS 10YR': '-',
+  'NIFTY GS 10YR CLN': '-',
+};
+</code></pre></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#getAllStocksCSV">getAllStocksCSV</a></li><li><a href="global.html#getCandleStickData">getCandleStickData</a></li><li><a href="global.html#getChartDataNew">getChartDataNew</a></li><li><a href="global.html#getCompanyInfo">getCompanyInfo</a></li><li><a href="global.html#getFuturesData">getFuturesData</a></li><li><a href="global.html#getGainers">getGainers</a></li><li><a href="global.html#getInclineDecline">getInclineDecline</a></li><li><a href="global.html#getIndexChartData">getIndexChartData</a></li><li><a href="global.html#getIndexInfo">getIndexInfo</a></li><li><a href="global.html#getIndexStocks">getIndexStocks</a></li><li><a href="global.html#getIndices">getIndices</a></li><li><a href="global.html#getIndices2">getIndices2</a></li><li><a href="global.html#getIntraDayDataXML">getIntraDayDataXML</a></li><li><a href="global.html#getLosers">getLosers</a></li><li><a href="global.html#getMarketStatus">getMarketStatus</a></li><li><a href="global.html#getQuoteInfo">getQuoteInfo</a></li><li><a href="global.html#getSectorsList">getSectorsList</a></li><li><a href="global.html#getStockCandleStickData">getStockCandleStickData</a></li><li><a href="global.html#getStockFutureOptionsExpiryDates">getStockFutureOptionsExpiryDates</a></li><li><a href="global.html#getStockFuturesData">getStockFuturesData</a></li><li><a href="global.html#getStockInfoAndDayChartData">getStockInfoAndDayChartData</a></li><li><a href="global.html#getStockMarketDepth">getStockMarketDepth</a></li><li><a href="global.html#getStockOptionsData">getStockOptionsData</a></li><li><a href="global.html#getStockOptionsPrices">getStockOptionsPrices</a></li><li><a href="global.html#getStocksChartData">getStocksChartData</a></li><li><a href="global.html#getTopTurnOvers">getTopTurnOvers</a></li><li><a href="global.html#searchEquityDerivatives">searchEquityDerivatives</a></li><li><a href="global.html#searchStocks">searchStocks</a></li><li><a href="global.html#TURNOVER_HEADERS">TURNOVER_HEADERS</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Sep 25 2018 11:56:38 GMT+0530 (IST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

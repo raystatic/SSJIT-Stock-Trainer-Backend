@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: nse/examples.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: nse/examples.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var NSEAPI = require('./index');
+var API = require('./service/NSEAPI');
+var merge = require('lodash/merge');
+/**
+ * Returns market status
+ * true => market Close
+ * false => market Open
+ * @returns {boolean}
+ */
+function getMarketStatus() {
+  return API.getMarketStatus()
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+/**
+ * API returning top indices
+ * @returns {*}
+ */
+function getIndices() {
+  return API.getIndices()
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+/**
+ * Return list of companies with their sector name
+ * [{
+      sector: "NIFTY IT ", //Sector name
+      symbol: "TRIGYN", //company symbol
+      PE: "0", // Symbol P/E value
+      date: "08-Jun-2018 06:45:10", // last date
+      sectorPE: "19.53" // Sectoral Index P/E value
+    }],
+ * @returns {array}
+ */
+function getSectorsList() {
+  return API.getSectorsList()
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+/**
+ * Get info about a stock
+ * @param symbol {string} symbol of company
+ *
+ * @returns {object}
+ */
+function getQuoteInfo(symbol) {
+  return API.getQuoteInfo(symbol)
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+
+function getQuotes(symbol) {
+  return API.getQuotes()
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+/**
+ * Get List of Gainers
+ * @returns {*}
+ */
+function getGainers() {
+  return API.getGainers()
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+/**
+ * Get List of Losers
+ * @returns {*}
+ */
+function getLosers() {
+  return API.getLosers()
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+/**
+ * Get Incline and Decline values
+ * @returns {*}
+ */
+function getInclineDecline() {
+  return API.getInclineDecline()
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+function getAllStocksCSV() {
+  return API.getAllStocksCSV()
+    .then(function (value) {
+      console.log(value.data)
+    });
+}
+
+function getIntraDayData(symbol) {
+  return API.getIntraDayData('TCS', 'month')
+    .then(function (value) {
+      console.log(value.data, 'value')
+    });
+}
+
+function getCandleStickData(symbol) {
+  return API.getCandleStickData(symbol, 1, true)
+    .then(function (value) {
+      console.log(value.data, 'value')
+    });
+}
+
+function searchStocks(symbol) {
+  return API.searchStocks(symbol)
+    .then(function (value) {
+      var data = value.data;
+      console.log(data);
+
+    });
+}
+
+function searchIndex(symbol) {
+  return API.searchIndex(symbol)
+    .then(function (value) {
+      var data = value.data;
+      console.log(data);
+
+    });
+}
+
+
+function getStockFuturesData(symbol, date) {
+  return API.getStockFuturesData(symbol, date)
+    .then(function (value) {
+      var data = value.data;
+      console.log(data);
+    });
+}
+
+function get52WeekHigh() {
+  return API.get52WeekHigh()
+    .then(function (value) {
+      var data = value.data;
+      console.log(data);
+    });
+}
+function get52WeekLow() {
+  return API.get52WeekLow()
+    .then(function (value) {
+      var data = value.data;
+      console.log(data);
+    });
+}
+
+function getTopValueStocks() {
+  return API.getTopValueStocks()
+    .then(function (value) {
+      var data = value.data;
+      console.log(data);
+    });
+}
+
+NSEAPI.getChartDataNew('VEDL', 'month')
+  .then(function (value) {
+    var data = value.data;
+    console.log(data);
+  })
+  .catch(e => {
+    console.log(e.config)
+  });
+
+var nse = {
+  getMarketStatus: getMarketStatus,
+  getIndices: getIndices,
+  getSectorsList: getSectorsList,
+  getQuoteInfo: getQuoteInfo,
+
+  getQuotes: getQuotes,
+
+  getGainers: getGainers,
+  getLosers: getLosers,
+
+  getInclineDecline: getInclineDecline
+};
+
+module.exports = nse;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#getAllStocksCSV">getAllStocksCSV</a></li><li><a href="global.html#getCandleStickData">getCandleStickData</a></li><li><a href="global.html#getChartDataNew">getChartDataNew</a></li><li><a href="global.html#getCompanyInfo">getCompanyInfo</a></li><li><a href="global.html#getFuturesData">getFuturesData</a></li><li><a href="global.html#getGainers">getGainers</a></li><li><a href="global.html#getInclineDecline">getInclineDecline</a></li><li><a href="global.html#getIndexChartData">getIndexChartData</a></li><li><a href="global.html#getIndexInfo">getIndexInfo</a></li><li><a href="global.html#getIndexStocks">getIndexStocks</a></li><li><a href="global.html#getIndices">getIndices</a></li><li><a href="global.html#getIndices2">getIndices2</a></li><li><a href="global.html#getIntraDayDataXML">getIntraDayDataXML</a></li><li><a href="global.html#getLosers">getLosers</a></li><li><a href="global.html#getMarketStatus">getMarketStatus</a></li><li><a href="global.html#getQuoteInfo">getQuoteInfo</a></li><li><a href="global.html#getSectorsList">getSectorsList</a></li><li><a href="global.html#getStockCandleStickData">getStockCandleStickData</a></li><li><a href="global.html#getStockFutureOptionsExpiryDates">getStockFutureOptionsExpiryDates</a></li><li><a href="global.html#getStockFuturesData">getStockFuturesData</a></li><li><a href="global.html#getStockInfoAndDayChartData">getStockInfoAndDayChartData</a></li><li><a href="global.html#getStockMarketDepth">getStockMarketDepth</a></li><li><a href="global.html#getStockOptionsData">getStockOptionsData</a></li><li><a href="global.html#getStockOptionsPrices">getStockOptionsPrices</a></li><li><a href="global.html#getStocksChartData">getStocksChartData</a></li><li><a href="global.html#getTopTurnOvers">getTopTurnOvers</a></li><li><a href="global.html#searchEquityDerivatives">searchEquityDerivatives</a></li><li><a href="global.html#searchStocks">searchStocks</a></li><li><a href="global.html#TURNOVER_HEADERS">TURNOVER_HEADERS</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Sep 25 2018 11:56:38 GMT+0530 (IST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

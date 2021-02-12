@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: bse/constant.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: bse/constant.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>exports.STOCKS_URL = 'https://www.bseindia.com/markets/equity/EQReports/MarketWatch.aspx?expandable=2';
+exports.TURNOVER_URL = 'https://www.bseindia.com/Msource/Turnover.aspx?ln=en';
+exports.INDICES_URL = 'https://www.bseindia.com/Msource/IndexMovers.aspx?ln=en';
+exports.INDEX_HEAT_MAP_URL = 'https://www.bseindia.com/SensexView/HeatMapSensex.aspx?flag=HEAT&amp;alpha=D';
+exports.GAINERS_URL = 'https://www.bseindia.com/Msource/gainers.aspx?ln=en';
+exports.LOSERS_URL = 'https://www.bseindia.com/Msource/Losers.aspx?ln=en';
+exports.DAILY_STOCKS_URL = 'https://www.bseindia.com/BSEGraph/Graphs/GetStockReachVolPriceDatav1.aspx?index=';
+exports.HISTORY_STOCKS_URL = 'https://www.bseindia.com/BSEGraph/Graphs/GetStockReachVolPriceData.aspx?index=';
+exports.COMPANY_HEADER_URL = 'https://www.bseindia.com/SiteCache/1D/CompanyHeader.aspx?Type=EQ&amp;text=';
+exports.INDICES_CHART_DATA_URL = 'https://www.bseindia.com/BSEGraph/Graphs/GetSensexViewData1.aspx?index=';
+exports.INDEX_INFO_URL = 'https://www.bseindia.com/SensexView/SensexViewbackPage.aspx';
+exports.STOCK_HIGH_LOW_URL = 'https://www.bseindia.com/stock-share-price/SiteCache/EQHeaderData.aspx';
+exports.STOCK_POINT_PERCENT_URL = 'https://www.bseindia.com/stock-share-price/SiteCache/IrBackupStockReach.aspx';
+exports.STOCK_CANDLESTICK_DAILY_URL = 'http://charting.bseindia.com/charting/RestDataProvider.svc/getDatI';
+exports.STOCK_CANDLESTICK_URL = 'http://charting.bseindia.com/charting/RestDataProvider.svc/getDat';
+/**
+ * Constant CSV Header Row to parse response values
+ */
+exports.TURNOVER_HEADERS = 'securityCode,todayClose,pointChange,pointPercent,symbol,turnover,volume,url';
+exports.INDICES_HEADERS = 'securityCode,todayClose,pointChange,pointPercent,unknownValue1,key,symbol';
+exports.GAINERS_HEADERS = 'securityCode,todayClose,pointChange,pointPercent,symbol,url';
+exports.LOSERS_HEADERS = 'securityCode,todayClose,pointChange,pointPercent,symbol,url';
+exports.DAILY_STOCKS_CLOSING_HEADERS = 'date,previousClose,minLow,maxHigh,symbol,latestValue,time,volumeRangeLow,volumeRangeHigh';
+exports.DAILY_STOCKS_HEADERS = 'dateTime,,stockValue,volume';</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#getAllStocksCSV">getAllStocksCSV</a></li><li><a href="global.html#getCandleStickData">getCandleStickData</a></li><li><a href="global.html#getChartDataNew">getChartDataNew</a></li><li><a href="global.html#getCompanyInfo">getCompanyInfo</a></li><li><a href="global.html#getFuturesData">getFuturesData</a></li><li><a href="global.html#getGainers">getGainers</a></li><li><a href="global.html#getInclineDecline">getInclineDecline</a></li><li><a href="global.html#getIndexChartData">getIndexChartData</a></li><li><a href="global.html#getIndexInfo">getIndexInfo</a></li><li><a href="global.html#getIndexStocks">getIndexStocks</a></li><li><a href="global.html#getIndices">getIndices</a></li><li><a href="global.html#getIndices2">getIndices2</a></li><li><a href="global.html#getIntraDayDataXML">getIntraDayDataXML</a></li><li><a href="global.html#getLosers">getLosers</a></li><li><a href="global.html#getMarketStatus">getMarketStatus</a></li><li><a href="global.html#getQuoteInfo">getQuoteInfo</a></li><li><a href="global.html#getSectorsList">getSectorsList</a></li><li><a href="global.html#getStockCandleStickData">getStockCandleStickData</a></li><li><a href="global.html#getStockFutureOptionsExpiryDates">getStockFutureOptionsExpiryDates</a></li><li><a href="global.html#getStockFuturesData">getStockFuturesData</a></li><li><a href="global.html#getStockInfoAndDayChartData">getStockInfoAndDayChartData</a></li><li><a href="global.html#getStockMarketDepth">getStockMarketDepth</a></li><li><a href="global.html#getStockOptionsData">getStockOptionsData</a></li><li><a href="global.html#getStockOptionsPrices">getStockOptionsPrices</a></li><li><a href="global.html#getStocksChartData">getStocksChartData</a></li><li><a href="global.html#getTopTurnOvers">getTopTurnOvers</a></li><li><a href="global.html#searchEquityDerivatives">searchEquityDerivatives</a></li><li><a href="global.html#searchStocks">searchStocks</a></li><li><a href="global.html#TURNOVER_HEADERS">TURNOVER_HEADERS</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Sep 25 2018 11:56:38 GMT+0530 (IST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
