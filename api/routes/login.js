@@ -33,6 +33,7 @@ router.post('/', (req, res, next) => {
         }else{
             if(rows.length === 0){
                 user.id = uuidv4();
+                user.user_created_at = new Date().getTime();
                 connection.query(insertUserQuery, user, (err, result) => {
                     if(err){
                         res.json({
@@ -61,6 +62,8 @@ router.post('/', (req, res, next) => {
                 user.loss = rows[0].loss;
                 user.positive_transactions = rows[0].positive_transactions;
                 user.negative_transactions = rows[0].negative_transactions;
+                user.isProUser = rows[0].isProUser
+                user.user_created_at = rows[0].user_created_at;
                 const updateUserQuery = `UPDATE users SET ? WHERE id = ?`;
                 connection.query(updateUserQuery,[user, user.id], (err, result) => {
                     if(err){
@@ -95,12 +98,6 @@ router.put('/',(req, res, next) => {
     });
 });
 
-router.patch('/',(req, res, next) => {
-    res.status(405).json({
-        error:true,
-        message:"Patch not supported"
-    });
-});
 
 router.delete('/',(req, res, next) => {
     res.status(405).json({

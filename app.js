@@ -9,6 +9,7 @@ const connection = require('./dbConfig');
 const loginRouter = require('./api/routes/login');
 const stockRouter = require('./api/routes/stock');
 const watchlistRouter = require('./api/routes/watchlist');
+const stripeRouter = require('./api/routes/stripe');
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use('/api/v1/login',loginRouter);
 app.use('/api/v1/stock',stockRouter);
 app.use('/api/v1/watchlist', watchlistRouter);
+app.use('/api/v1/stripe', stripeRouter)
 
 app.use('/',(req, res, next) => {
     
