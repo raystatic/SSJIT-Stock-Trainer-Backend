@@ -1,7 +1,7 @@
 const { json } = require('body-parser');
 const express = require('express');
 const router = express.Router();
-const api = require('../../indian-stock-exchange');
+const api = require('indian-stock-exchange');
 const connection = require('../../dbConfig');
 const {v4: uuidv4} = require('uuid');
 const OrderStatus = require('./orderStatus');
@@ -12,24 +12,38 @@ const NSEAPI = api.NSE;
 
 const BSEAPI = api.BSE;
 
+async function text(res){
+  const data =  await NSEAPI.searchStocks("TCS")
+                .then((response) => {
+                  return response.data
+                })
+
+      res.json({
+        error:false,
+        data:data
+      });
+}
+
 router.get('/search',(req, res, next) => {
 
   const keyword = req.query.keyword;
 
-  NSEAPI.searchStocks(keyword)
-    .then((response) => {
-      res.json({
-        error:false,
-        data:response.data
-      });
-    })
-    .catch((err) => {
-      console.log(`Error: ${err}`)
-      res.json({
-        error:true,
-        message:`Some error occurred`
-      });
-    });
+  text(res);
+
+  // NSEAPI.searchStocks(keyword)
+  //   .then((response) => {
+  //     res.json({
+  //       error:false,
+  //       data:response.data
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log(`Error: ${err}`)
+  //     res.json({
+  //       error:true,
+  //       message:`Some error occurred`
+  //     });
+  //   });
 });
 
 router.get('/stock_info',(req, res, next) => {
