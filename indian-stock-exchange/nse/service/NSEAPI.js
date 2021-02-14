@@ -213,16 +213,16 @@ function getCandleStickData(symbol, time, isIndex) {
 }
 
 function searchStocks(searchString) {
-  var options = {
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Referer': 'https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp',
-      Host: 'www.nseindia.com'
-    },
-    transformResponse: searchTransformer(false)
-  };
+  // var options = {
+  //   headers: {
+  //     'X-Requested-With': 'XMLHttpRequest',
+  //     'Referer': 'https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp',
+  //     Host: 'www.nseindia.com'
+  //   },
+  //   transformResponse: searchTransformer(false)
+  // };
 
-  return axios.get(SEARCH_URL + encodeURIComponent(searchString), options);
+  return axios.get(SEARCH_URL + encodeURIComponent(searchString));
 }
 
 function searchEquityDerivatives(searchString) {
